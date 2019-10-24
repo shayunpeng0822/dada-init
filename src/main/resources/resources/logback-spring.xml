@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <property name="LOG_HOME" value="/data/logs/java/dftask"/>
+  <property name="APP_NAME" value="dftask"/>
+  <property name="STANDARD_PATTERN"
+    value="%date{yyyy-MM-dd HH:mm:ss.SSS Z} [%thread] %-5p [%c] [%F:%L] - %X{traceId} - %msg%n"/>
+
+  <include resource="logback/defaults.xml"/>
+
+  <property name="INFO_LOG" value="dftask_info"/>
+  <property name="ERROR_LOG" value="dftask_error"/>
+  <property name="API_LOG" value="dftaskAPI_info"/>
+  <property name="RPC_LOG" value="dftaskRPC_info"/>
+  <property name="RPC_STATS_LOG" value="dftask_rpcStats"/>
+
+  <!--<appender class="ch.qos.logback.core.ConsoleAppender" name="STDOUT">
+    <encoder>
+      <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+      <charset>utf8</charset>
+    </encoder>
+  </appender>-->
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="INFO">
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <!-- 过滤掉非INFO级别 -->
+      <level>INFO</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <encoder>
+      <Pattern>${STANDARD_PATTERN}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <file>${LOG_HOME}/${INFO_LOG}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <FileNamePattern>${LOG_HOME}/history/${INFO_LOG}.%d{yyyyMMdd}.%i.log.gz</FileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="ERROR">
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <!-- 过滤掉非ERROR级别 -->
+      <level>ERROR</level>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <encoder>
+      <Pattern>${STANDARD_PATTERN}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <file>${LOG_HOME}/${ERROR_LOG}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <FileNamePattern>${LOG_HOME}/history/${ERROR_LOG}.%d{yyyyMMdd}.%i.log.gz
+      </FileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="api">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <!-- 过滤掉TRACE和DEBUG级别的日志 -->
+      <level>INFO</level>
+    </filter>
+    <encoder>
+      <Pattern>${STANDARD_PATTERN}</Pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <file>${LOG_HOME}/${API_LOG}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/history/${API_LOG}.%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="rpc">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <!-- 过滤掉TRACE和DEBUG级别的日志 -->
+      <level>INFO</level>
+    </filter>
+    <encoder>
+      <pattern>${STANDARD_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+    <file>${LOG_HOME}/${RPC_LOG}.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/history/${RPC_LOG}.%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="rpcAppender">
+    <file>${LOG_HOME}/${RPC_STATS_LOG}.log</file>
+    <append>true</append>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/history/${RPC_STATS_LOG}.%d{yyyyMMdd}.%i.log.gz</fileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="monitorAppender">
+    <file>${LOG_HOME}/${APP_NAME}_monitorMetrics.log</file>
+    <append>true</append>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${LOG_HOME}/history/${APP_NAME}_monitorMetrics.log.%d{yyyy-MM-dd}.%i.gz
+      </fileNamePattern>
+      <maxFileSize>500MB</maxFileSize>
+      <maxHistory>30</maxHistory>
+      <totalSizeCap>10GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>${STANDARD_PATTERN}</pattern>
+      <charset>UTF-8</charset>
+    </encoder>
+  </appender>
+
+  <logger additivity="false" level="INFO"
+    name="com.dada.infra.metrics.client.adapter.DadaMeterRegistry">
+    <appender-ref ref="monitorAppender"/>
+  </logger>
+
+  <logger level="INFO" name="com.dada.base.registry.stats.RpcStatsUtil">
+    <appender-ref ref="rpcAppender"/>
+  </logger>
+
+  <logger additivity="false" level="INFO" name="api">
+    <appender-ref ref="api"/>
+  </logger>
+
+  <logger additivity="false" level="INFO" name="rpc">
+    <appender-ref ref="rpc"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="INFO"/>
+    <appender-ref ref="ERROR"/>
+    <!--<appender-ref ref="STDOUT"/>-->
+  </root>
+</configuration>

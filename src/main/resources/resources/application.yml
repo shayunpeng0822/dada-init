@@ -1,0 +1,33 @@
+spring:
+  cloud:
+    consul:
+      discovery:
+        health-check-path: /health
+        consulUrl: http://consul.ndev.imdada.cn
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  profiles:
+    active: local
+  application:
+    name: hello-world
+
+server:
+  port: 8080
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: /data/logs/java/dftask
+      prefix: dftask_access
+      rename-on-rotate: true
+    uri-encoding: utf-8
+    max-threads: 100
+
+systemName: hello-world
+useLocal: false
+
+httpConn:
+  connectTimeout: 300
+  socketTimeout: 700
